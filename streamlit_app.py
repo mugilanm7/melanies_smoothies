@@ -9,15 +9,6 @@ st.write(
     """
 )
 
-
-# option = st.selectbox(
-#     "What is you favorite fruit?",
-#     ("Banana", "Strawberries", "Peaches"),
-# )
-
-# st.write("Your favorite fruit is:", option)
-
-
 cnx = st.connection("snowflake")
 session = cnx.session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
@@ -32,8 +23,6 @@ ingredients_list = st.multiselect(
     , max_selections = 5
 )
 if ingredients_list and name_on_order:
-    # st.write(ingredients_list)
-    # st.text(ingredients_list)
     ingredients_string = ''
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
@@ -46,6 +35,10 @@ if ingredients_list and name_on_order:
     if time_to_insert and ingredients_string:
         session.sql(my_insert_stmt).collect()
         st.success('Your Smoothie is ordered, '+name_on_order, icon="✅")
+
+import requests
+smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+st.text(smoothiefroot_response)
 
 
 
